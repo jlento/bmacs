@@ -7,11 +7,7 @@ PKG=${PKG_NAME}-${PKG_VERSION}
 URL=https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/${PKG}.tar.gz
 
 
-: ${BMAC_HOST:=${HOSTNAME%%[^[:alpha:]]*}}
-: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
-
-source ${BMAC_ROOT}/configs/${BMAC_HOST}_bmacsrc.bash
-source ${BMAC_ROOT}/bmacs.bash $URL
+source ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}/bmacs.bash $URL
 
 bmac-yes-no <<EOF
 $(bmac-prep)

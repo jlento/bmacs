@@ -1,5 +1,8 @@
 #!/bin/bash
 
+: ${BMAC_HOST:=${HOSTNAME%%[^[:alpha:]]*}}
+source ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE}))}/configs/${BMAC_HOST}_bmacsrc.bash
+
 echo "Build host:         BMAC_HOST         = ${BMAC_HOST}"
 echo "Build macros root:  BMAC_ROOT         = ${BMAC_ROOT}"
 echo "Download URL:       BMAC_URL          = ${BMAC_URL:=$1}"
