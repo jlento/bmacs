@@ -24,8 +24,8 @@ source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacs_rc.bash
 
 : ${BMAC_CS:=GNU}
 : ${BMAC_CC:=gcc}
-: ${BMAC_FC:=gfortran}
-: ${BMAC_F77:=gfortran}
+: ${BMAC_FC:=$(set -- $(compgen -c gfortran); echo $1)}
+: ${BMAC_F77:=${BMAC_FC}}
 : ${BMAC_CXX:=g++}
 : ${BMAC_BUILD_DIR:=$TMPDIR}
 : ${BMAC_INSTALL_ROOT:=$PWD}

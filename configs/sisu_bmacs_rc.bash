@@ -1,9 +1,11 @@
 #!/bin/bash
 
-: ${BMAC_CC:=cc}
-: ${BMAC_FC:=ftn}
-: ${BMAC_F77:=ftn}
-: ${BMAC_CXX:=CC}
+if [ ! "${PE_ENV}" = "" ]; then
+    : ${BMAC_CC:=cc}
+    : ${BMAC_FC:=ftn}
+    : ${BMAC_F77:=ftn}
+    : ${BMAC_CXX:=CC}
+fi
 : ${BMAC_CS:=${PE_ENV:=GNU}}
 : ${BMAC_INSTALL_ROOT:=/appl/climate}
 
