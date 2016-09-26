@@ -11,4 +11,6 @@ $(bmac-setmod craype-sandybridge)
 $(bmac-configure --disable-netcdf --host=x86_64-unknown-linux --disable-shared \
   FLIBS=  ac_cv_f77_compiler_gnu=no)
 make -j 8 install
+
+$(bmac-modulefile)
 EOF

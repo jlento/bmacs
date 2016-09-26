@@ -52,6 +52,8 @@ BMAC_VAR_DESC=(
     "Build dir:          BMAC_BUILD_DIR"
     "Install root:       BMAC_INSTALL_ROOT"
     "Install dir:        BMAC_INSTALL_DIR"
-    "Modulefiles dir:    BMAC_MODULEFILES")
+    "Modulefiles dir:    BMAC_MODULEFILES"
+    "Module dir:         BMAC_MODULE_DIR"
+    "Module file:       BMAC_MODULE_FILE")
 
 bmac-print-vars "${BMAC_VAR_DESC[@]}"
