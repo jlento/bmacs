@@ -36,7 +36,7 @@ bmac-prep () {
 	fi
 	echo "tar xvf ${BMAC_TGZ}"
     fi
-    echo "cd ${BMAC_PKG:?Set BMAC_PKG}"
+    echo "cd ${BMAC_PKG}"
     echo " "
 }
 
