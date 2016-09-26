@@ -20,7 +20,7 @@ source ${BMAC_ROOT}/bmacs_funcs.bash
 
 # Environment defaults
 
-source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacsrc.bash || true
+source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacs_rc.bash
 
 : ${BMAC_CS:=GNU}
 : ${BMAC_CC:=gcc}

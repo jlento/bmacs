@@ -29,9 +29,9 @@ bmac-print-vars () {
 
 bmac-prep () {
     echo "# ${FUNCNAME}"
-    echo "cd ${BMAC_BUILD_DIR}"
-    if [ ! -d "${BMAC_PKG:?Set BMAC_PKG}" ]; then
-	if [ ! -f "${BMAC_TGZ:?Set BMAC_TGZ}" ]; then
+    echo "cd ${BMAC_BUILD_DIR:?Set BMAC_BUILD_DIR}"
+    if [ ! -d "${BMAC_BUILD_DIR}/${BMAC_PKG:?Set BMAC_PKG}" ]; then
+	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ:?Set BMAC_TGZ}" ]; then
 	    echo "wget ${BMAC_URL:?Set BMAC_URL}"
 	fi
 	echo "tar xvf ${BMAC_TGZ}"
