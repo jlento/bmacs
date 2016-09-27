@@ -6,9 +6,9 @@ bmac-major-version () {
 }
 
 bmac-setmod () {
-    local conflicts=$(grep -o -f <(awk '/^conflict/{print $2}' <(module show $* 2>&1)) <(module list 2>&1))
+    local conflicts="$(grep -xf <(awk '/^conflict/{print $2}' <(module show $* 2>&1)) <(module -t list 2>&1 | sed 's|/.*$||'))"
     echo "# ${FUNCNAME}"
-    echo "module unload $conflicts"
+    [ "$conflicts" ] && echo "module unload $conflicts"
     echo "module load $*"
     echo " "
 }
@@ -38,15 +38,16 @@ bmac-feeling-lucky () {
 }
 
 bmac-prep () {
+    local srcdir=${BMAC_TGZ%.t[ag][rz]*}
     echo "# ${FUNCNAME}"
     echo "cd ${BMAC_BUILD_DIR:?Set BMAC_BUILD_DIR}"
-    if [ ! -d "${BMAC_BUILD_DIR}/${BMAC_PKG:?Set BMAC_PKG}" ]; then
-	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ:?Set BMAC_TGZ}" ]; then
+    if [ ! -d "${BMAC_BUILD_DIR}/${srcdir:?Set BMAC_TGZ}" ]; then
+	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ}" ]; then
 	    echo "wget ${BMAC_URL:?Set BMAC_URL}"
 	fi
 	echo "tar xvf ${BMAC_TGZ}"
     fi
-    echo "cd ${BMAC_PKG}"
+    echo "cd ${srcdir}"
     echo " "
 }
 
