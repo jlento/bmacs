@@ -7,7 +7,6 @@ bmac-major-version () {
 
 bmac-setmod () {
     local conflicts=$(grep -o -f <(awk '/^conflict/{print $2}' <(module show $* 2>&1)) <(module list 2>&1))
-
     echo "# ${FUNCNAME}"
     echo "module unload $conflicts"
     echo "module load $*"
@@ -25,6 +24,17 @@ bmac-print-vars () {
 	printf "# %-20s %-18s = %s\n" "${BASH_REMATCH[1]}:" "$v" "${!v}"
     done
     echo
+}
+
+bmac-requires () {
+    local var
+    for var in "$@"; do
+	: ${!var:?Set ${var}.}
+    done
+}
+
+bmac-feeling-lucky () {
+    compgen -c "$1" | { read head tail; echo $head; }
 }
 
 bmac-prep () {
