@@ -40,6 +40,7 @@ bmac-feeling-lucky () {
 bmac-prep () {
     local srcdir=${BMAC_TGZ%.t[ag][rz]*}
     echo "# ${FUNCNAME}"
+    echo "module unload ${BMAC_PKG_NAME:?Set BMAC_PKG_NAME}"
     echo "cd ${BMAC_BUILD_DIR:?Set BMAC_BUILD_DIR}"
     if [ ! -d "${BMAC_BUILD_DIR}/${srcdir:?Set BMAC_TGZ}" ]; then
 	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ}" ]; then
@@ -69,7 +70,7 @@ bmac-yes-no () {
     read -r -p "Continue? [y/N] " response
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
     then
-	bash $tmp
+	bash -e $tmp
     else
 	echo Exiting.
     fi

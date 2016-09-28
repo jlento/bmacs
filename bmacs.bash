@@ -2,6 +2,8 @@
 
 # BMACS initialization stuff
 
+[[ "${BASH_SOURCE[0]}" == "${0}" ]] && set -e
+
 : ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE}))}
 : ${BMAC_HOST_TAG:=${HOSTNAME%%[^[:alpha:]]*}}
 
