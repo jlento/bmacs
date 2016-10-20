@@ -4,7 +4,7 @@
 
 URL=https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.gz
 
-source "${BMAC_ROOT}/bmacs.bash" "$URL"
+source "${BMAC_ROOT}/bmacs.bash" "wget $URL"
 
 bmac-yes-no <<EOF
 $(bmac-prep)

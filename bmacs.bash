@@ -9,7 +9,7 @@
 source ${BMAC_ROOT}/bmacs_funcs.bash
 
 read -d BMACS_USAGE <<EOF
-Usage: bash ${BASH_SOURCE[0]} [-c|--c-compiler-only C-COMPILER] URL
+Usage: bash ${BASH_SOURCE[0]} [-c|--c-compiler-only C-COMPILER] GET_SRC_CMD
 EOF
 
 BMAC_C_ONLY=false
@@ -31,15 +31,13 @@ done
 if [ $# -ne 1 ]; then
     echo $BMACS_USAGE >&2 ; false
 else
-    : ${BMAC_URL:=$1}
+    : ${BMAC_SRC:=$1}
 fi
 
 
 # Package defaults
 
-: ${BMAC_TGZ:=$(basename ${BMAC_URL})}
-: ${BMAC_PKG:=$(basename ${BMAC_TGZ%.[t][ag][rz]*})}
-: ${BMAC_PKG_SRC_DIR:=${BMAC_PKG}}
+: ${BMAC_PKG:=$(basename ${BMAC_SRC%.[t][ag][rz]*})}
 : ${BMAC_PKG_NAME:=${BMAC_PKG%-*}}
 : ${BMAC_PKG_VERSION:=${BMAC_PKG##*-}}
 
@@ -62,24 +60,24 @@ source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacs_rc.bash
 # Decsription of the available variables
 
 BMAC_VAR_DESC=(
-    "Download URL:       BMAC_URL"
-    "Source archive:     BMAC_TGZ"
-    "Source dir name:    BMAC_PKG_SRC_DIR"
-    "Package:            BMAC_PKG"
-    "Package name:       BMAC_PKG_NAME"
-    "Package version:    BMAC_PKG_VERSION"
-    "Build host:         BMAC_HOST_TAG"
-    "Build macros root:  BMAC_ROOT"
-    "Compiler suite(CS): BMAC_CS"
-    "CS version:         BMAC_CS_VERSION"
-    "C compiler:         BMAC_CC"
-    "Fortran compiler:   BMAC_FC"
-    "Fortran77 compiler: BMAC_F77"
-    "C++ compiler:       BMAC_CXX"
-    "Build dir:          BMAC_BUILD_DIR"
-    "Install root:       BMAC_INSTALL_ROOT"
-    "Install dir:        BMAC_INSTALL_DIR"
-    "Modulefiles dir:    BMAC_MODULEFILES"
-    "Module dir:         BMAC_MODULE_DIR"
-    "Module file:        BMAC_MODULE_FILE"
-    "Only C API:         BMAC_C_ONLY")
+    "Source download cmd: BMAC_SRC"
+    "Source archive:      BMAC_TGZ"
+    "Source dir name:     BMAC_PKG_SRC_DIR"
+    "Package:             BMAC_PKG"
+    "Package name:        BMAC_PKG_NAME"
+    "Package version:     BMAC_PKG_VERSION"
+    "Build host:          BMAC_HOST_TAG"
+    "Build macros root:   BMAC_ROOT"
+    "Compiler suite(CS):  BMAC_CS"
+    "CS version:          BMAC_CS_VERSION"
+    "C compiler:          BMAC_CC"
+    "Fortran compiler:    BMAC_FC"
+    "Fortran77 compiler:  BMAC_F77"
+    "C++ compiler:        BMAC_CXX"
+    "Build dir:           BMAC_BUILD_DIR"
+    "Install root:        BMAC_INSTALL_ROOT"
+    "Install dir:         BMAC_INSTALL_DIR"
+    "Modulefiles dir:     BMAC_MODULEFILES"
+    "Module dir:          BMAC_MODULE_DIR"
+    "Module file:         BMAC_MODULE_FILE"
+    "Only C API:          BMAC_C_ONLY")

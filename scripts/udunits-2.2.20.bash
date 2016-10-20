@@ -6,7 +6,7 @@
 
 URL=ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.20.tar.gz
 
-source "${BMAC_ROOT}/bmacs.bash" -c gcc "$URL"
+source "${BMAC_ROOT}/bmacs.bash" "wget $URL"
 
 bmac-yes-no <<EOF
 $(bmac-header)

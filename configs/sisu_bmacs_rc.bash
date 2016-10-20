@@ -35,15 +35,13 @@ bmac-gen-pc () {
     echo "craypkg-gen -p ${BMAC_INSTALL_DIR:?Set BMAC_INSTALL_DIR.}"
     # This allows inserting dependencies to external static libraries as positional arguments of the form
     # "dependee:dependency1:dependency2", etc.
-#    local dep
-#    local fname
-#    for dep in "$@"; do
-#	find ${BMAC_INSTALL_DIR} -name ${dep%%:*}.pc | {
-#	    while read fname; do
-#      		echo "sed -i 's/#external-requires-private#/${dep#*:}/' $fname"
-#	    done
-#	}
-#    done
+    echo "for dep in $@; do"
+    echo "    find ${BMAC_INSTALL_DIR}"' -name ${dep%%:*}.pc | {'
+    echo '        while read fname; do'
+    echo '            sed -i "s/#external-requires#/${dep#*:}/" $fname'
+    echo '        done'
+    echo '    }'
+    echo 'done'
     echo " "
 }
 

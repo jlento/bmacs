@@ -49,21 +49,27 @@ bmac-header () {
 }
 
 bmac-prep () {
-    bmac-requires BMAC_BUILD_DIR BMAC_PKG BMAC_PKG_SRC_DIR
+    bmac-requires BMAC_BUILD_DIR BMAC_SRC BMAC_PKG
     echo "# ${FUNCNAME}"
     echo "cd ${BMAC_BUILD_DIR}"
 
-    local modnames=$(FS=: compgen -W "${LOADEDMODULES}" -- "${BMAC_PKG}")
+    local modnames=$(FS=: compgen -W "${LOADEDMODULES}" -- "${BMAC_PKG_NAME}")
     [ "$modnames" ] && echo "module unload ${modnames}"
 
-    if [ ! -d "${BMAC_BUILD_DIR}/${BMAC_PKG_SRC_DIR}" ]; then
-	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ}" ]; then
-	    echo "wget ${BMAC_URL:?Set BMAC_URL}"
-	fi
-	echo "tar xvf ${BMAC_TGZ}"
-    fi
-    echo "cd ${BMAC_PKG_SRC_DIR}"
-    echo " "
+    local tgz=$(basename "${BMAC_SRC}")
+    [ -e "${tgz}" ] || echo "${BMAC_SRC}"
+    case "${tgz}" in
+	*.tar.gz)
+	    echo "tar xvf ${tgz}"
+	    tgz=${tgz%.tar.gz}
+	    ;;
+	*.tgz)
+	    tar xvf ${tgz}
+	    echo "tgz=${tgz%.tgz}"
+	    ;;
+    esac
+    echo "cd ${tgz}"
+    echo ' '
 }
 
 bmac-configure () {
@@ -84,7 +90,7 @@ bmac-yes-no () {
     read -r -p "Continue? [y/N] " response
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
     then
-	bash -e $tmp
+	bash -ex $tmp
     else
 	echo Exiting.
     fi
