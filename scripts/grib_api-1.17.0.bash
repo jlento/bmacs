@@ -1,9 +1,10 @@
 #!/bin/bash
 
+: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
+
 URL=https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-1.17.0-Source.tar.gz
 BMAC_PKG=grib_api-1.17.0
 
-: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
 source "${BMAC_ROOT}/bmacs.bash" "$URL"
 
 bmac-yes-no <<EOF

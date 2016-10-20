@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [ ! "${PE_ENV}" = "" ]; then
+: ${BMAC_INSTALL_ROOT:=/appl/climate}
+: ${BMAC_CS:=${PE_ENV}}
+
+if [ "${BMAC_CS}" ]; then
     : ${BMAC_CC:=cc}
     : ${BMAC_FC:=ftn}
     : ${BMAC_F77:=ftn}
     : ${BMAC_CXX:=CC}
 fi
-: ${BMAC_CS:=${PE_ENV:=GNU}}
-: ${BMAC_INSTALL_ROOT:=/appl/climate}
 
 case ${BMAC_CS} in
     INTEL)
@@ -21,8 +22,12 @@ case ${BMAC_CS} in
 	: ${BMAC_CS_VERSION:=$(bmac-major-version ${CRAY_CC_VERSION})}
 	;;
 esac
-: ${BMAC_INSTALL_DIR:=${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME:?Set BMAC_PKG_NAME.}/${BMAC_PKG_VERSION:?Set BMAC_PKG_VERSION.}/${BMAC_CS}/${BMAC_CS_VERSION}}
 
+if $BMAC_C_ONLY; then
+    : ${BMAC_INSTALL_DIR:=${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME:?Set BMAC_PKG_NAME.}/${BMAC_PKG_VERSION:?Set BMAC_PKG_VERSION.}}
+else
+    : ${BMAC_INSTALL_DIR:=${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME:?Set BMAC_PKG_NAME.}/${BMAC_PKG_VERSION:?Set BMAC_PKG_VERSION.}/${BMAC_CS}/${BMAC_CS_VERSION}}
+fi
 
 bmac-gen-pc () {
     echo "# ${FUNCNAME}"
@@ -30,15 +35,15 @@ bmac-gen-pc () {
     echo "craypkg-gen -p ${BMAC_INSTALL_DIR:?Set BMAC_INSTALL_DIR.}"
     # This allows inserting dependencies to external static libraries as positional arguments of the form
     # "dependee:dependency1:dependency2", etc.
-    local dep
-    local fname
-    for dep in "$@"; do
-	find ${BMAC_INSTALL_DIR} -name ${dep%%:*}.pc | {
-	    while read fname; do
-      		echo "sed -i 's/#external-requires-private#/${dep#*:}/' $fname"
-	    done
-	}
-    done
+#    local dep
+#    local fname
+#    for dep in "$@"; do
+#	find ${BMAC_INSTALL_DIR} -name ${dep%%:*}.pc | {
+#	    while read fname; do
+#      		echo "sed -i 's/#external-requires-private#/${dep#*:}/' $fname"
+#	    done
+#	}
+#    done
     echo " "
 }
 

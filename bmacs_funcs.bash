@@ -5,6 +5,12 @@ bmac-major-version () {
     echo "$1.$2"
 }
 
+bmac-head () {
+    local head tail
+    read head tail
+    echo $head
+}
+
 bmac-setmod () {
     local conflicts="$(grep -xf <(awk '/^conflict/{print $2}' <(module show $* 2>&1)) <(module -t list 2>&1 | sed 's|/.*$||'))"
     echo "# ${FUNCNAME}"
@@ -37,18 +43,26 @@ bmac-feeling-lucky () {
     compgen -c "$1" | { read head tail; echo $head; }
 }
 
-bmac-prep () {
-    local srcdir=${BMAC_TGZ%.t[ag][rz]*}
+bmac-header () {
     echo "# ${FUNCNAME}"
-    echo "module unload ${BMAC_PKG_NAME:?Set BMAC_PKG_NAME}"
-    echo "cd ${BMAC_BUILD_DIR:?Set BMAC_BUILD_DIR}"
-    if [ ! -d "${BMAC_BUILD_DIR}/${srcdir:?Set BMAC_TGZ}" ]; then
+    bmac-print-vars "${BMAC_VAR_DESC[@]}"
+}
+
+bmac-prep () {
+    bmac-requires BMAC_BUILD_DIR BMAC_PKG BMAC_PKG_SRC_DIR
+    echo "# ${FUNCNAME}"
+    echo "cd ${BMAC_BUILD_DIR}"
+
+    local modnames=$(FS=: compgen -W "${LOADEDMODULES}" -- "${BMAC_PKG}")
+    [ "$modnames" ] && echo "module unload ${modnames}"
+
+    if [ ! -d "${BMAC_BUILD_DIR}/${BMAC_PKG_SRC_DIR}" ]; then
 	if [ ! -f "${BMAC_BUILD_DIR}/${BMAC_TGZ}" ]; then
 	    echo "wget ${BMAC_URL:?Set BMAC_URL}"
 	fi
 	echo "tar xvf ${BMAC_TGZ}"
     fi
-    echo "cd ${srcdir}"
+    echo "cd ${BMAC_PKG_SRC_DIR}"
     echo " "
 }
 

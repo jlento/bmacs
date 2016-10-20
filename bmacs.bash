@@ -1,21 +1,45 @@
 #!/bin/bash
 
+
 # BMACS initialization stuff
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && set -e
-
-: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE}))}
+: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE[0]}))}
 : ${BMAC_HOST_TAG:=${HOSTNAME%%[^[:alpha:]]*}}
 
 source ${BMAC_ROOT}/bmacs_funcs.bash
 
+read -d BMACS_USAGE <<EOF
+Usage: bash ${BASH_SOURCE[0]} [-c|--c-compiler-only C-COMPILER] URL
+EOF
+
+BMAC_C_ONLY=false
+BMACS_ARGS=$(getopt -n "${BASH_SOURCE[0]}" -o 'c:' -l c-compiler-only: -- "$@")
+[ $? != 0 ] && { echo $BMACS_USAGE >&2 ; false; }
+eval set -- "$BMACS_ARGS"
+while true ; do
+    case "$1" in
+	-c|--c-compiler-only) BMAC_C_ONLY=true
+			      : ${BMAC_CC:=$2}
+			      : ${BMAC_CXX:=false}
+			      : ${BMAC_FC:=false}
+			      : ${BMAC_F77:=false}
+			      shift 2 ;;
+	--) shift ; break ;;
+        *) echo "${BASH_SOURCE[0]}: Internal error with getopt!" 1>&2 ; break ;;
+    esac
+done
+if [ $# -ne 1 ]; then
+    echo $BMACS_USAGE >&2 ; false
+else
+    : ${BMAC_URL:=$1}
+fi
+
 
 # Package defaults
-# Derived from the 1st argument to this script, the download URL of the package.
 
-: ${BMAC_URL:=$1}
 : ${BMAC_TGZ:=$(basename ${BMAC_URL})}
-: ${BMAC_PKG:=${BMAC_TGZ%.[t][ag][rz]*}}
+: ${BMAC_PKG:=$(basename ${BMAC_TGZ%.[t][ag][rz]*})}
+: ${BMAC_PKG_SRC_DIR:=${BMAC_PKG}}
 : ${BMAC_PKG_NAME:=${BMAC_PKG%-*}}
 : ${BMAC_PKG_VERSION:=${BMAC_PKG##*-}}
 
@@ -31,7 +55,7 @@ source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacs_rc.bash
 : ${BMAC_CXX:=g++}
 : ${BMAC_BUILD_DIR:=$TMPDIR}
 : ${BMAC_INSTALL_ROOT:=$PWD}
-: ${BMAC_INSTALL_DIR:=${BMAC_INSTALL_ROOT}/${BMAC_PKG}}
+: ${BMAC_INSTALL_DIR:=${BMAC_INSTALL_ROOT}}
 : ${BMAC_MODULEFILES:=${BMAC_INSTALL_ROOT}/modulefiles}
 
 
@@ -40,6 +64,7 @@ source ${BMAC_ROOT}/configs/${BMAC_HOST_TAG}_bmacs_rc.bash
 BMAC_VAR_DESC=(
     "Download URL:       BMAC_URL"
     "Source archive:     BMAC_TGZ"
+    "Source dir name:    BMAC_PKG_SRC_DIR"
     "Package:            BMAC_PKG"
     "Package name:       BMAC_PKG_NAME"
     "Package version:    BMAC_PKG_VERSION"
@@ -56,6 +81,5 @@ BMAC_VAR_DESC=(
     "Install dir:        BMAC_INSTALL_DIR"
     "Modulefiles dir:    BMAC_MODULEFILES"
     "Module dir:         BMAC_MODULE_DIR"
-    "Module file:       BMAC_MODULE_FILE")
-
-bmac-print-vars "${BMAC_VAR_DESC[@]}"
+    "Module file:        BMAC_MODULE_FILE"
+    "Only C API:         BMAC_C_ONLY")

@@ -1,8 +1,9 @@
 #!/bin/bash
 
+: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
+
 URL=https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.gz
 
-: ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
 source "${BMAC_ROOT}/bmacs.bash" "$URL"
 
 bmac-yes-no <<EOF
