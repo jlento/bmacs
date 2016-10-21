@@ -89,8 +89,8 @@ bmac-configure () {
 }
 
 bmac-permissions () {
-    chmod -R a+rX ${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME}
-    chmod -R a+rX ${BMAC_MODULEFILES}/${BMAC_PKG_NAME}
+    echo "chmod -R a+rX,g+rwX ${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME}"
+    echo "chmod -R a+rX,g+rwX ${BMAC_MODULEFILES}/${BMAC_PKG_NAME}"
 }
 
 bmac-yes-no () {

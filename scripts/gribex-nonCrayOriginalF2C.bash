@@ -23,4 +23,5 @@ EOF_ANSWERS
 
 $(bmac-gen-pc gribexR64:udunits2)
 $(bmac-modulefile)
+$(bmac-permissions)
 EOF

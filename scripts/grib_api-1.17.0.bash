@@ -14,4 +14,5 @@ make -j 8 install
 
 $(bmac-gen-pc)
 $(bmac-modulefile)
+$(bmac-permissions)
 EOF
