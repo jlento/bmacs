@@ -56,16 +56,16 @@ bmac-prep () {
     local modnames=$(FS=: compgen -W "${LOADEDMODULES}" -- "${BMAC_PKG_NAME}")
     [ "$modnames" ] && echo "module unload ${modnames}"
 
-    local tgz=$(basename "${BMAC_SRC##* }")
-    [ -e "${tgz}" ] || echo "${BMAC_SRC}"
+    local tgz=$(basename "${BMAC_SRC}")
+    [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "${BMAC_SRC}"
     case "${tgz}" in
 	*.tar.gz)
-	    echo "tar xvf ${tgz}"
 	    tgz=${tgz%.tar.gz}
+	    [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "tar xvf ${tgz}.tar.gz"
 	    ;;
 	*.tgz)
-	    tar xvf ${tgz}
-	    echo "tgz=${tgz%.tgz}"
+	    tgz=${tgz%.tgz}
+	    [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "tar xvf ${tgz}.tgz"
 	    ;;
     esac
     echo "cd ${tgz}"
@@ -89,8 +89,10 @@ bmac-configure () {
 }
 
 bmac-permissions () {
+    echo "# ${FUNCNAME}"
     echo "chmod -R a+rX,g+rwX ${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME}"
     echo "chmod -R a+rX,g+rwX ${BMAC_MODULEFILES}/${BMAC_PKG_NAME}"
+    echo " "
 }
 
 bmac-yes-no () {

@@ -1,21 +1,18 @@
 #!/bin/bash
 
-# udunits has C API, only (great!).
-
 : ${BMAC_ROOT:=$(readlink -f $(dirname ${BASH_SOURCE})/..)}
 
-URL=ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.20.tar.gz
+URL=https://ftp.gnu.org/gnu/bash/bash-4.4.tar.gz
 
 source "${BMAC_ROOT}/bmacs.bash" -c gcc "wget $URL"
 
 bmac-yes-no <<EOF
 $(bmac-header)
 $(bmac-prep)
-$(bmac-configure)
-make clean
+$(bmac-configure --without-bash-malloc)
+
 make -j 8 install
 
-$(bmac-gen-pc)
 $(bmac-modulefile)
 $(bmac-permissions)
 EOF

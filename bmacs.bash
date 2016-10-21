@@ -34,10 +34,10 @@ else
     : ${BMAC_SRC:=$1}
 fi
 
-
+echo "PKG_SRC: $PKG_SRC"
 # Package defaults
 
-: ${BMAC_PKG:=$(basename ${BMAC_SRC%.[t][ag][rz]*})}
+: ${BMAC_PKG:=$(basename "${BMAC_SRC%.[t][ag][rz]*}")}
 : ${BMAC_PKG_NAME:=${BMAC_PKG%-*}}
 : ${BMAC_PKG_VERSION:=${BMAC_PKG##*-}}
 
