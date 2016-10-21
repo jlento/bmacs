@@ -78,7 +78,13 @@ bmac-configure () {
     echo "export FC=${BMAC_FC:?Set BMAC_FC.}"
     echo "export F77=${BMAC_F77:?Set BMAC_F77.}"
     echo "export CXX=${BMAC_CXX:?Set BMAC_CXX.}"
-    echo "./configure --prefix=${BMAC_INSTALL_DIR:?Set BMAC_INSTALL_DIR.} $*"
+    local prefix="--prefix=${BMAC_INSTALL_DIR:?Set BMAC_INSTALL_DIR.}"
+    if [ "$MACHTYPE" ]; then
+	local mach=" --build=$MACHTYPE"
+    else
+	local mach=""
+    fi
+    echo "./configure ${prefix}${mach} $*"
     echo " "
 }
 
