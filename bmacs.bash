@@ -34,7 +34,7 @@ else
     : ${BMAC_SRC:=$1}
 fi
 
-echo "PKG_SRC: $PKG_SRC"
+
 # Package defaults
 
 : ${BMAC_PKG:=$(basename "${BMAC_SRC%.[t][ag][rz]*}")}

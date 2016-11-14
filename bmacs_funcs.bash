@@ -45,7 +45,11 @@ bmac-feeling-lucky () {
 
 bmac-header () {
     echo "# ${FUNCNAME}"
+    echo ' '
+    module -t list 2>&1 | sed 's/.*/# &/'
+    echo ' '
     bmac-print-vars "${BMAC_VAR_DESC[@]}"
+    echo ' '
 }
 
 bmac-prep () {
@@ -57,18 +61,12 @@ bmac-prep () {
     [ "$modnames" ] && echo "module unload ${modnames}"
 
     local tgz=$(basename "${BMAC_SRC}")
+    shopt -s nocasematch
+    [[ "${tgz}" =~ (.*)(\.tar\.gz|\.tgz) ]]
+    : ${srcdir:=${BASH_REMATCH[1]}}
     [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "${BMAC_SRC}"
-    case "${tgz}" in
-	*.tar.gz)
-	    tgz=${tgz%.tar.gz}
-	    [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "tar xvf ${tgz}.tar.gz"
-	    ;;
-	*.tgz)
-	    tgz=${tgz%.tgz}
-	    [ -e "${BMAC_BUILD_DIR}/${tgz}" ] || echo "tar xvf ${tgz}.tgz"
-	    ;;
-    esac
-    echo "cd ${tgz}"
+    [ -e "${BMAC_BUILD_DIR}/${srcdir}" ] || echo "tar xvf ${tgz}"
+    echo "cd ${srcdir}"
     echo ' '
 }
 
@@ -103,7 +101,7 @@ bmac-yes-no () {
     read -r -p "Continue? [y/N] " response
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
     then
-	bash -ex $tmp
+	bash -ex $tmp 2>&1 | tee ${BMAC_INSTALL_DIR:?Set BMAC_INSTALL_DIR.}/build-$(date --rfc-3339=date).log
     else
 	echo Exiting.
     fi

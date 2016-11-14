@@ -1,8 +1,8 @@
 # bmacs
 
-A simple framework for HPC software installs
+A simple framework for HPC software installs on Cray XC40.
 
 # TODO
 
-- environment modules
 - more package install scripts
+- other platforms

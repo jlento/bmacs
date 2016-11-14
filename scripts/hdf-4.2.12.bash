@@ -7,6 +7,7 @@ URL=https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.g
 source "${BMAC_ROOT}/bmacs.bash" "wget $URL"
 
 bmac-yes-no <<EOF
+$(bmac-header)
 $(bmac-prep)
 $(bmac-setmod craype-sandybridge)
 $(bmac-configure --disable-netcdf --host=x86_64-unknown-linux \
@@ -14,6 +15,7 @@ $(bmac-configure --disable-netcdf --host=x86_64-unknown-linux \
 make -j 8 install
 
 $(bmac-gen-pc)
+sed -i 's/^Libs:.*/& -ljpeg -lz/' ${BMAC_INSTALL_DIR}/lib/pkgconfig/df.pc 2>&-
 $(bmac-modulefile)
 $(bmac-permissions)
 EOF
