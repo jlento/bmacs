@@ -55,6 +55,6 @@ bmac-modulefile () {
     $(bmac-requires BMAC_MODULEFILES BMAC_INSTALL_ROOT BMAC_PKG_NAME BMAC_PKG_VERSION)
     [ -d "${BMAC_MODULEFILES}" ] || echo "mkdir -p ${BMAC_MODULEFILES}"
     echo "module load craypkg-gen"
-    echo "craypkg-gen -m ${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME}/${BMAC_PKG_VERSION}"
+    echo "craypkg-gen -m ${BMAC_INSTALL_ROOT}/${BMAC_PKG_NAME}/${BMAC_PKG_VERSION} $@" 
     echo " "
 }
